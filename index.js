@@ -1,8 +1,9 @@
+require("dotenv").config();
 const http = require("http"); // Es lo mismo que usar import http from 'http'
 const express = require("express");
 const cors = require("cors");
-
 const app = express();
+const Note = require("./models/note.js");
 
 // Para acceder a la data facil (acceder a la request body)
 app.use(express.json());
@@ -10,24 +11,24 @@ app.use(express.json());
 app.use(cors());
 
 app.use(express.static("dist"));
-// app.use(requestLogger);
-let notes = [
-  {
-    id: 1,
-    content: "HTML is easy",
-    important: true,
-  },
-  {
-    id: 2,
-    content: "Browser can execute only JavaScript",
-    important: false,
-  },
-  {
-    id: 3,
-    content: "GET and POST are the most important methods of HTTP protocol",
-    important: true,
-  },
-];
+
+// let notes = [
+//   {
+//     id: 1,
+//     content: "HTML is easy",
+//     important: true,
+//   },
+//   {
+//     id: 2,
+//     content: "Browser can execute only JavaScript",
+//     important: false,
+//   },
+//   {
+//     id: 3,
+//     content: "GET and POST are the most important methods of HTTP protocol",
+//     important: true,
+//   },
+// ];
 
 // Routes:
 app.get("/", (request, response) => {
@@ -35,7 +36,8 @@ app.get("/", (request, response) => {
 });
 
 app.get("/api/notes", (request, response) => {
-  response.json(notes);
+  // response.json(notes);
+  Note.find({}).then((notes) => response.json(notes));
 });
 
 app.get("/api/notes/:id", (request, response) => {
@@ -96,7 +98,7 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint);
 
-const PORT = process.env.port || 3001;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
