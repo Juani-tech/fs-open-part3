@@ -1,13 +1,15 @@
 const http = require("http"); // Es lo mismo que usar import http from 'http'
 const express = require("express");
+const cors = require("cors");
+
 const app = express();
 
 // Para acceder a la data facil (acceder a la request body)
 app.use(express.json());
 
-const cors = require("cors");
 app.use(cors());
 
+app.use(express.static("dist"));
 // app.use(requestLogger);
 let notes = [
   {
